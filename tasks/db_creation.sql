@@ -32,9 +32,19 @@ Nincs lehetőség több címzett megadására - azaz egy üzenetet csak egy felh
 Az adatbázisnak képesnek kell lennie a következő adatok tárolására:
     1. regisztrált felhasználók adatai
         - kötelező adatok: név, email-cím, jelszó, aktív felhasználó-e, a regisztrálás időpontja
+
+            CREATE TABLE `modulzáró`.`user` (`ID` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(100) NOT NULL
+             , `email` VARCHAR(100) NOT NULL , `password` VARCHAR(100) NOT NULL
+             , `active` BOOLEAN NOT NULL , `reg.date` DATE NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;
+
     2. a regisztrált felhasználók által egymásnak küldött üzenetek adatai
         - kötelező adatok: küldő, címzett, üzenet szövege, az üzenet küldésének időpontja,
           továbbá ha az üzenet egy korábban kapottra válasz, akkor hivatkozás a megválaszolt üzenetre
+
+          CREATE TABLE `modulzáró`.`message` (`ID` INT NOT NULL AUTO_INCREMENT , `SenderId` INT NOT NULL , `AddressID` INT NOT NULL , `Text` TEXT NOT NULL ,
+           `TextDate` DATE NOT NULL , `PreMessageID` INT NULL , PRIMARY KEY (`ID`),
+           FOREIGN KEY(`SenderId`) REFERENCES `felhasználók`(`ID`), FOREIGN KEY(`AddressID`) REFERENCES `felhasználók`(`ID`),
+            FOREIGN KEY(`PreMessageID`) REFERENCES `message`(`ID`) )ENGINE = InnoDB;
 
 Kritériumok az adatbázissal kapcsolatban:
     - legalább kettő, legfeljebb négy táblát tartalmazzon
@@ -55,4 +65,8 @@ Bónusz feladat (5 pont)
 Adj hozzá adatokat mindegyik táblához!
 (Az adatoknak nem kell valósnak lenniük. Egy felhasználói email-cím lehet például: 'valami@valami.va')
 
-*/
+INSERT INTO `felhasználók`(`name`, `email`, `password`, `active`, `reg.date`)
+ VALUES ('Csóka', 'vmi@vmi.hu', 'titkos', 1, '2020-07-09')
+
+INSERT INTO `message`(`SenderId`, `AddressID`, `Text`, `TextDate`)
+ VALUES (1, 1, 'Remélem ez már jobban fog sikerülni', '2022-07-09')*/
