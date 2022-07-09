@@ -203,7 +203,8 @@ Jó munkát!
     hogy nincs érték megadva az `IndepYear`-nél, vagy 1500 előtt nyerték el a függetlenségüket!
     A találatokat rendezd a darabszám szerint csökkenő sorrendbe!
 
-        Megoldás: SELECT country.Region, (COUNT(*))AS `Darabszám` FROM `country` WHERE (IndepYear < 1500 OR IndepYear IS NULL) AND country.Region IS NOT NULL
+        Megoldás: SELECT country.Region, (COUNT(*))AS `Darabszám` FROM `country`
+                  WHERE (IndepYear < 1500 OR IndepYear IS NULL) AND country.GNP IS NOT NULL
                   GROUP BY country.Region HAVING COUNT(*)
                   ORDER by `Darabszám` DESC;
 
@@ -269,6 +270,13 @@ bónusz 1. (4 pont)
     Írj lekérdezést, amely visszaadja az ország hárombetűs kódját, kétbetűs kódját és nevét,
     ahol a hárombetűs országkód első két betűje nem azonos a kétbetűs kóddal!
 
+        Megoldás:
+
+        SELECT country.Code, country.Code2, country.Name FROM `country`
+        WHERE !(LEFT(country.Code,2) = country.Code2) AND `Code2` IS NOT NULL
+        AND `Code` is NOT NULL;
+
+
     Elvárt eredmény:
         88 rekord
 */
@@ -282,6 +290,11 @@ bónusz 2. (4 pont)
     A feladatot egy lekérdezésben oldd meg! Azaz nem elfogadható, ha először lekérdezed az országkódot,
     az kimásolod, és beleilleszted a lekérdezésbe.
 
+         Megoldás: SELECT * FROM `city`
+                   RIGHT JOIN (SELECT *FROM `country`WHERE IndepYear=(SELECT MIN(IndepYear) FROM country)) AS `vmi`
+                   ON `vmi`.Code = city.CountryCode;
+
+
     Elvárt eredmény:
         363 rekord
 */
@@ -292,6 +305,11 @@ bónusz 3. (4 pont)
     Mekkora a százaléka a legnagyobb százalékban beszélt nyelveknek országonként?
     Írj lekérdezést, amely visszaadja az országkódot és az országban a legnagyobb százalékban beszélt nyelv százalékát!
     A feladatot egy lekérdezésben oldd meg!
+
+            FÉL Megoldás :( Nem jöttem rá :/
+            SELECT country.Code, MAX(`Percentage`) FROM `countrylanguage`
+            INNER JOIN `country`ON country.`Code` = `countrylanguage`.`CountryCode`
+            GROUP BY `CountryCode` HAVING MAX(`Percentage`)  ;
 
     Elvárt eredmény:
         233 rekord
